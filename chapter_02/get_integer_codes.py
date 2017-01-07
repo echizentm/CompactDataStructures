@@ -2,30 +2,24 @@
 import sys
 
 
-def bin_str(code):
-    return bin(code)[2:]
-
-
 def unary(x):
-    return (bin_str(1), x)
+    return (1, x)
 
 
 def gamma(x):
-    bx = bin_str(x)
-    return (bx, 2 * len(bx) - 1)
+    return (x, 2 * x.bit_length() - 1)
 
 
 def delta(x):
-    bx_len = len(bin_str(x))
-    (c, b) = gamma(bx_len)
+    (c, b) = gamma(x.bit_length())
     return (
-        bin_str(x + ((int(c, 2) - 1) << (bx_len - 1))),
-        bx_len - 1 + b,
+        x + ((c - 1) << (x.bit_length() - 1)),
+        x.bit_length() - 1 + b,
     )
 
 
 def code_str(code):
-    return '{:0>{fill}}'.format(code[0], fill=code[1])
+    return '{:0>{fill}}'.format(bin(code[0])[2:], fill=code[1])
 
 
 for line in sys.stdin:
