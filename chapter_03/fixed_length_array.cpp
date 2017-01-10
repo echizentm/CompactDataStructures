@@ -73,15 +73,19 @@ class fixed_length_array {
 public:
     const unsigned int cell_size = sizeof(unsigned int) * 8;
 
-    fixed_length_array(unsigned int length) {
+    fixed_length_array(unsigned int length, unsigned int size = 0) {
         this->length = length;
-        this->size = 0;
+        resize(size);
     }
     unsigned int read(unsigned int index) {
         return bits_read(index * length, (index + 1) * length);
     }
     void write(unsigned int index, unsigned int value) {
         bits_write(index * length, (index + 1) * length, value);
+    }
+    void resize(unsigned int size) {
+        this->size = size;
+        push_to_index((this->size + 1) * length);
     }
     void push_back(unsigned int value) {
         push_to_index((size + 1) * length - 1);
@@ -95,14 +99,14 @@ public:
 
 
 bool run_vector(int length, int num) {
-    vector<unsigned int> vec;
+    vector<unsigned int> vec(num);
     vector<int> range(num);
     iota(range.begin(), range.end(), 0);
     int mod = pow(2, length);
 
     cout << "run vector (length = " << length << ")" << endl;
     auto begin_write = system_clock::now();
-    for (auto i : range) { vec.push_back(i % mod); }
+    for (auto i : range) { vec[i] = i % mod; }
     auto end_write = system_clock::now();
     cout << "msec to write: " << duration_cast<milliseconds>(end_write - begin_write).count() << endl;
 
@@ -119,14 +123,14 @@ bool run_vector(int length, int num) {
 
 
 bool run_fixed_length_array(int length, int num) {
-    fixed_length_array a(length);
+    fixed_length_array a(length, num);
     vector<int> range(num);
     iota(range.begin(), range.end(), 0);
     int mod = pow(2, length);
 
     cout << "run fixed length array (length = " << length << ")" << endl;
     auto begin_write = system_clock::now();
-    for (auto i : range) { a.push_back(i % mod); }
+    for (auto i : range) { a.write(i, i % mod); }
     auto end_write = system_clock::now();
     cout << "msec to write: " << duration_cast<milliseconds>(end_write - begin_write).count() << endl;
 
