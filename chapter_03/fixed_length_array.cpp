@@ -85,12 +85,11 @@ public:
     }
     void resize(unsigned int size) {
         this->size = size;
-        push_to_index((this->size + 1) * length);
+        push_to_index(this->size * length - 1);
     }
     void push_back(unsigned int value) {
-        push_to_index((size + 1) * length - 1);
-        write(size, value);
-        size++;
+        resize(size + 1);
+        write(size - 1, value);
     }
     unsigned int vector_size() {
         return vec.size();
