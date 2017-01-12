@@ -13,7 +13,16 @@ class fixed_length_array {
     unsigned int length;
     unsigned int size;
     vector<unsigned int> vec;
+    bool is_rapid;
+    unsigned int elements_in_a_cell;
 
+    unsigned int get_bit_index(unsigned int index) {
+        return (
+            is_rapid ?
+            index / elements_in_a_cell * cell_size + index % elements_in_a_cell :
+            index
+        ) * length;
+    }
     void push_to_index(unsigned int index) {
         while (vec.size() <= (index / cell_size)) {
             vec.push_back(0);
@@ -73,19 +82,23 @@ class fixed_length_array {
 public:
     const unsigned int cell_size = sizeof(unsigned int) * 8;
 
-    fixed_length_array(unsigned int length, unsigned int size = 0) {
+    fixed_length_array(unsigned int length, unsigned int size = 0, bool is_rapid = false) {
         this->length = length;
+        this->is_rapid = is_rapid;
+        elements_in_a_cell = cell_size / length;
         resize(size);
     }
     unsigned int read(unsigned int index) {
-        return bits_read(index * length, (index + 1) * length);
+        unsigned int bit_index = get_bit_index(index);
+        return bits_read(bit_index, bit_index + length);
     }
     void write(unsigned int index, unsigned int value) {
-        bits_write(index * length, (index + 1) * length, value);
+        unsigned int bit_index = get_bit_index(index);
+        bits_write(bit_index, bit_index + length, value);
     }
     void resize(unsigned int size) {
         this->size = size;
-        push_to_index(this->size * length - 1);
+        push_to_index(get_bit_index(size) - 1);
     }
     void push_back(unsigned int value) {
         resize(size + 1);
@@ -121,13 +134,13 @@ bool run_vector(int length, int num) {
 }
 
 
-bool run_fixed_length_array(int length, int num) {
-    fixed_length_array a(length, num);
+bool run_fixed_length_array(int length, int num, bool is_rapid) {
+    fixed_length_array a(length, num, is_rapid);
     vector<int> range(num);
     iota(range.begin(), range.end(), 0);
     int mod = pow(2, length);
 
-    cout << "run fixed length array (length = " << length << ")" << endl;
+    cout << "run fixed length array (length = " << length << ", is_rapid = " << is_rapid << ")" << endl;
     auto begin_write = system_clock::now();
     for (auto i : range) { a.write(i, i % mod); }
     auto end_write = system_clock::now();
@@ -152,7 +165,8 @@ int main(int argc, char **argv) {
     iota(range.begin(), range.end(), 1);
     for (auto length : range) {
         if (!run_vector(length, num)) { cout << "failure!" << endl; return 1; }
-        if (!run_fixed_length_array(length, num)) { cout << "failure!" << endl; return 1; }
+        if (!run_fixed_length_array(length, num, true)) { cout << "failure!" << endl; return 1; }
+        if (!run_fixed_length_array(length, num, false)) { cout << "failure!" << endl; return 1; }
     }
     return 0;
 }
