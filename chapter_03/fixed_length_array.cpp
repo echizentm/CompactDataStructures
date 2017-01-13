@@ -14,14 +14,15 @@ class fixed_length_array {
     unsigned int size;
     vector<unsigned int> vec;
     bool is_rapid;
+    unsigned int cell_rest_size;
     unsigned int elements_in_a_cell;
 
     unsigned int get_bit_index(unsigned int index) {
         return (
-            is_rapid ?
-            index / elements_in_a_cell * cell_size + index % elements_in_a_cell :
-            index
-        ) * length;
+            (is_rapid && cell_rest_size > 0) ?
+            index / elements_in_a_cell * cell_size + index % elements_in_a_cell * length :
+            index * length
+        );
     }
     void push_to_index(unsigned int index) {
         while (vec.size() <= (index / cell_size)) {
@@ -65,14 +66,14 @@ class fixed_length_array {
         );
     }
     unsigned int bits_read(unsigned int begin, unsigned int end) {
-        if (is_in_a_cell(begin, end)) {
+        if (is_rapid || is_in_a_cell(begin, end)) {
             return bits_read_from_a_cell(begin, end);
         } else {
             return bits_read_from_two_cells(begin, end);
         }
     }
     void bits_write(unsigned int begin, unsigned int end, unsigned int value) {
-        if (is_in_a_cell(begin, end)) {
+        if (is_rapid || is_in_a_cell(begin, end)) {
             bits_write_to_a_cell(begin, end, value);
         } else {
             bits_write_to_two_cells(begin, end, value);
@@ -86,6 +87,7 @@ public:
         this->length = length;
         this->is_rapid = is_rapid;
         elements_in_a_cell = cell_size / length;
+        cell_rest_size = cell_size % length;
         resize(size);
     }
     unsigned int read(unsigned int index) {
