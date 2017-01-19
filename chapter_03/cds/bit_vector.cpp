@@ -33,6 +33,27 @@ namespace cds {
     }
 
 
+    unsigned int bit_vector::bits_read(
+        unsigned int begin, unsigned int end
+    ) {
+        if (this->is_in_a_cell(begin, end)) {
+            return this->bits_read_from_a_cell(begin, end);
+        } else {
+            return this->bits_read_from_two_cells(begin, end);
+        }
+    }
+
+    void bit_vector::bits_write(
+        unsigned int begin, unsigned int end, unsigned int value
+    ) {
+        if (this->is_in_a_cell(begin, end)) {
+            this->bits_write_to_a_cell(begin, end, value);
+        } else {
+            this->bits_write_to_two_cells(begin, end, value);
+        }
+    }
+
+
     bool bit_vector::is_in_a_cell(
         unsigned int begin, unsigned int end
     ) {

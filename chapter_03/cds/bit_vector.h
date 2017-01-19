@@ -17,6 +17,9 @@ namespace cds {
         void bit_set(unsigned int index);
         void bit_clear(unsigned int index);
 
+        unsigned int bits_read(unsigned int begin, unsigned int end);
+        void bits_write(unsigned int begin, unsigned int end, unsigned int value);
+
         bool is_in_a_cell(unsigned int begin, unsigned int end);
         unsigned int bits_read_from_a_cell(unsigned int begin, unsigned int end);
         unsigned int bits_read_from_two_cells(unsigned int begin, unsigned int end);
