@@ -17,16 +17,6 @@ int main(int argc, char **argv) {
     }
     cout << endl;
 
-    for (int i = 0; i < sp.bv.size; i++) {
-        cout << sp.bv.bit_read(i) << " ";
-    }
-    cout << endl;
-
-    for (auto sample : sp.samples) {
-        cout << sample << " ";
-    }
-    cout << endl;
-
     for (int i = 0; i < sp.size; i++) {
         cout << sp.read(i) << " ";
     }

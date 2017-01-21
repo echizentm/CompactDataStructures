@@ -4,9 +4,10 @@
 
 namespace cds {
     class sampled_pointers {
-    public:
         bit_vector bv;
         std::vector<unsigned int> samples;
+
+    public:
         unsigned int rate;
         unsigned int size;
 
@@ -14,6 +15,5 @@ namespace cds {
 
         unsigned int read(unsigned int index);
         void push_back(unsigned int value);
-        unsigned int bits_reverse(unsigned int value, unsigned int length);
     };
 }

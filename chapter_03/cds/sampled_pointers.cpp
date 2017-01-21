@@ -20,7 +20,7 @@ namespace cds {
             unsigned int end = begin + zeros_length + 1;
 
             if (values_to_read == 0) {
-                return this->bits_reverse(this->bv.bits_read(begin, end), end - begin) - 1;
+                return this->bv.bits_read(begin, end, true) - 1;
             }
             values_to_read -= 1;
             begin = end;
@@ -45,19 +45,6 @@ namespace cds {
         unsigned int end = begin + value_length;
 
         this->bv.resize(end);
-        this->bv.bits_write(begin, end, this->bits_reverse(value, end - begin));
-    }
-
-    unsigned int sampled_pointers::bits_reverse(
-        unsigned int value, unsigned int length
-    ) {
-        unsigned int reversed = 0;
-        while (length > 0) {
-            reversed <<= 1;
-            reversed |= (value & 1);
-            value >>= 1;
-            length -= 1;
-        }
-        return reversed;
+        this->bv.bits_write(begin, end, value, true);
     }
 }
