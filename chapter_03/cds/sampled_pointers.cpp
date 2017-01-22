@@ -7,6 +7,10 @@ namespace cds {
         this->size = 0;
     }
 
+    unsigned int sampled_pointers::vector_size() {
+        return this->bv.vector_size() + this->samples.size();
+    }
+
     unsigned int sampled_pointers::read(unsigned int index) {
         unsigned int begin = this->samples[index / this->rate];
         unsigned int values_to_read = index % this->rate;

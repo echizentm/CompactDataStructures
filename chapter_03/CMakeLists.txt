@@ -9,6 +9,7 @@ add_executable(
     fixed_length_vector_sample
     fixed_length_vector_sample.cpp
     cds/bit_vector.cpp
+    cds/fixed_length_vector.cpp
 )
 add_executable(
     sampled_pointers_sample

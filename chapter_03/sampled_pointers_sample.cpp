@@ -22,5 +22,7 @@ int main(int argc, char **argv) {
     }
     cout << endl;
 
+    cout << "vector size: " << sp.vector_size() << endl;
+
     return 0;
 }

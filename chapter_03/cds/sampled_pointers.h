@@ -13,6 +13,7 @@ namespace cds {
 
         sampled_pointers(unsigned int rate = 4);
 
+        unsigned int vector_size();
         unsigned int read(unsigned int index);
         void push_back(unsigned int value);
     };

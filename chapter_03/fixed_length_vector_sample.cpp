@@ -3,68 +3,12 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
-#include "cds/bit_vector.h"
+#include "cds/fixed_length_vector.h"
 
 
 using namespace std;
 using namespace std::chrono;
 using namespace cds;
-
-
-class fixed_length_vector {
-    unsigned int length;
-    unsigned int size;
-    bit_vector bv;
-    bool is_rapid;
-    unsigned int cell_rest_size;
-    unsigned int elements_in_a_cell;
-
-    unsigned int get_bit_index(unsigned int index) {
-        return (
-            (is_rapid && cell_rest_size > 0) ?
-            index / elements_in_a_cell * bv.cell_size + index % elements_in_a_cell * length :
-            index * length
-        );
-    }
-    unsigned int bits_read(unsigned int begin, unsigned int end) {
-        if (is_rapid || bv.is_in_a_cell(begin, end)) {
-            return bv.bits_read_from_a_cell(begin, end);
-        } else {
-            return bv.bits_read_from_two_cells(begin, end);
-        }
-    }
-    void bits_write(unsigned int begin, unsigned int end, unsigned int value) {
-        if (is_rapid || bv.is_in_a_cell(begin, end)) {
-            bv.bits_write_to_a_cell(begin, end, value);
-        } else {
-            bv.bits_write_to_two_cells(begin, end, value);
-        }
-    }
-
-public:
-    fixed_length_vector(unsigned int length, unsigned int size = 0, bool is_rapid = false) {
-        this->length = length;
-        this->is_rapid = is_rapid;
-        elements_in_a_cell = bv.cell_size / length;
-        cell_rest_size = bv.cell_size % length;
-        resize(size);
-    }
-    unsigned int read(unsigned int index) {
-        unsigned int bit_index = get_bit_index(index);
-        return bits_read(bit_index, bit_index + length);
-    }
-    void write(unsigned int index, unsigned int value) {
-        unsigned int bit_index = get_bit_index(index);
-        bits_write(bit_index, bit_index + length, value);
-    }
-    void resize(unsigned int size) {
-        this->size = size;
-        bv.resize(get_bit_index(size));
-    }
-    unsigned int vector_size() {
-        return bv.vector_size();
-    }
-};
 
 
 bool run_vector(int length, int num) {
