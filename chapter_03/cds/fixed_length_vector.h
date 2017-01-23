@@ -1,3 +1,7 @@
+#ifndef CDS_FIXED_LENGTH_VECTOR_H
+#define CDS_FIXED_LENGTH_VECTOR_H
+
+
 #include "bit_vector.h"
 
 
@@ -22,3 +26,6 @@ namespace cds {
         void write(unsigned int index, unsigned int value);
     };
 }
+
+
+#endif // CDS_FIXED_LENGTH_VECTOR_H

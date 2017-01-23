@@ -12,8 +12,10 @@ add_executable(
     cds/fixed_length_vector.cpp
 )
 add_executable(
-    sampled_pointers_sample
-    sampled_pointers_sample.cpp
+    variable_length_vector_sample
+    variable_length_vector_sample.cpp
     cds/bit_vector.cpp
+    cds/fixed_length_vector.cpp
     cds/sampled_pointers.cpp
+    cds/dense_pointers.cpp
 )

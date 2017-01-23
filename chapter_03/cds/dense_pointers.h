@@ -1,21 +1,23 @@
-#ifndef CDS_SAMPLED_POINTERS_H
-#define CDS_SAMPLED_POINTERS_H
+#ifndef CDS_DENSE_POINTERS_H
+#define CDS_DENSE_POINTERS_H
 
 
 #include <vector>
 #include "bit_vector.h"
+#include "fixed_length_vector.h"
 
 
 namespace cds {
-    class sampled_pointers {
+    class dense_pointers {
         bit_vector bv;
+        fixed_length_vector offsets;
         std::vector<unsigned int> samples;
 
     public:
         unsigned int rate;
         unsigned int size;
 
-        sampled_pointers(unsigned int rate = 4);
+        dense_pointers(unsigned int max_length, unsigned int rate = 4);
 
         unsigned int vector_size();
         unsigned int read(unsigned int index);
@@ -24,4 +26,4 @@ namespace cds {
 }
 
 
-#endif // CDS_SAMPLED_POINTERS_H
+#endif // CDS_DENSE_POINTERS_H
