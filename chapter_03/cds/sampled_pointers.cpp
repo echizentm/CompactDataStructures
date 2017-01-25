@@ -26,7 +26,7 @@ namespace cds {
             if (values_to_read == 0) {
                 return this->bv.bits_read(begin, end, true) - 1;
             }
-            values_to_read -= 1;
+            values_to_read--;
             begin = end;
         }
     }
@@ -37,7 +37,7 @@ namespace cds {
         }
         this->size++;
 
-        value += 1;
+        value++;
         unsigned int value_dummy = value;
         unsigned int value_length = 0;
         while (value_dummy != 0) {
