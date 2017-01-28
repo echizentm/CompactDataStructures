@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "cds/sampled_pointers.h"
-#include "cds/dense_pointers.h"
+#include "sampled_pointers.h"
+#include "dense_pointers.h"
 
 
 using namespace std;
