@@ -33,7 +33,7 @@ namespace cds {
         }
 
         return (
-            this->bv.bits_read(begin, end, true) | (1 << (end - begin))
+            this->bv.bits_read(begin, end) | (1 << (end - begin))
         ) - 1;
     }
 
@@ -50,14 +50,7 @@ namespace cds {
         this->size++;
 
         value++;
-        unsigned int value_dummy = value;
-        unsigned int value_length = 0;
-        while (value_dummy != 0) {
-            value_dummy >>= 1;
-            value_length++;
-        }
-
-        value_length--;
+        unsigned int value_length = bits_length(value) - 1;
         if (value_length == 0) {
             return;
         }
@@ -67,6 +60,6 @@ namespace cds {
         unsigned int end = begin + value_length;
 
         this->bv.resize(end);
-        this->bv.bits_write(begin, end, value, true);
+        this->bv.bits_write(begin, end, value);
     }
 }

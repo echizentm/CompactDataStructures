@@ -38,12 +38,7 @@ namespace cds {
         this->size++;
 
         value++;
-        unsigned int value_dummy = value;
-        unsigned int value_length = 0;
-        while (value_dummy != 0) {
-            value_dummy >>= 1;
-            value_length++;
-        }
+        unsigned int value_length = bits_length(value);
 
         unsigned int begin = this->bv.size + value_length - 1;
         unsigned int end = begin + value_length;

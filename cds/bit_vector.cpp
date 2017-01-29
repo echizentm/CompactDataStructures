@@ -2,9 +2,7 @@
 
 
 namespace cds {
-    unsigned int bit_vector::bits_reverse(
-        unsigned int value, unsigned int length
-    ) {
+    unsigned int bits_reverse(unsigned int value, unsigned int length) {
         unsigned int reversed = 0;
         while (length > 0) {
             reversed <<= 1;
@@ -14,6 +12,16 @@ namespace cds {
         }
         return reversed;
     }
+
+    unsigned int bits_length(unsigned int value) {
+        unsigned int length = 0;
+        while (value != 0) {
+            value >>= 1;
+            length++;
+        }
+        return length;
+    }
+
 
     bit_vector::bit_vector(unsigned int size) {
         this->resize(size);
@@ -47,22 +55,22 @@ namespace cds {
 
 
     unsigned int bit_vector::bits_read(
-        unsigned int begin, unsigned int end, bool bits_reverse
+        unsigned int begin, unsigned int end, bool is_bits_reverse
     ) {
         if (this->is_in_a_cell(begin, end)) {
-            return this->bits_read_from_a_cell(begin, end, bits_reverse);
+            return this->bits_read_from_a_cell(begin, end, is_bits_reverse);
         } else {
-            return this->bits_read_from_two_cells(begin, end, bits_reverse);
+            return this->bits_read_from_two_cells(begin, end, is_bits_reverse);
         }
     }
 
     void bit_vector::bits_write(
-        unsigned int begin, unsigned int end, unsigned int value, bool bits_reverse
+        unsigned int begin, unsigned int end, unsigned int value, bool is_bits_reverse
     ) {
         if (this->is_in_a_cell(begin, end)) {
-            this->bits_write_to_a_cell(begin, end, value, bits_reverse);
+            this->bits_write_to_a_cell(begin, end, value, is_bits_reverse);
         } else {
-            this->bits_write_to_two_cells(begin, end, value, bits_reverse);
+            this->bits_write_to_two_cells(begin, end, value, is_bits_reverse);
         }
     }
 
@@ -74,20 +82,20 @@ namespace cds {
     }
 
     unsigned int bit_vector::bits_read_from_a_cell(
-        unsigned int begin, unsigned int end, bool bits_reverse
+        unsigned int begin, unsigned int end, bool is_bits_reverse
     ) {
        unsigned int value = this->vec[(end - 1) / this->cell_size]
                     >> (begin % this->cell_size)
                     & ((1 << (end - begin)) - 1);
 
-       if (bits_reverse) {
-           value = this->bits_reverse(value, end - begin);
+       if (is_bits_reverse) {
+           value = bits_reverse(value, end - begin);
        }
        return value;
     }
 
     unsigned int bit_vector::bits_read_from_two_cells(
-        unsigned int begin, unsigned int end, bool bits_reverse
+        unsigned int begin, unsigned int end, bool is_bits_reverse
     ) {
         unsigned int value = (this->vec[begin / this->cell_size] >> (begin % this->cell_size))
                      | (
@@ -95,17 +103,17 @@ namespace cds {
                          << (this->cell_size - (begin % this->cell_size))
                      );
 
-       if (bits_reverse) {
-           value = this->bits_reverse(value, end - begin);
+       if (is_bits_reverse) {
+           value = bits_reverse(value, end - begin);
        }
        return value;
     }
 
     void bit_vector::bits_write_to_a_cell(
-        unsigned int begin, unsigned int end, unsigned int value, bool bits_reverse
+        unsigned int begin, unsigned int end, unsigned int value, bool is_bits_reverse
     ) {
-        if (bits_reverse) {
-            value = this->bits_reverse(value, end - begin);
+        if (is_bits_reverse) {
+            value = bits_reverse(value, end - begin);
         }
 
         this->vec[(end - 1) / this->cell_size] &= ~(
@@ -116,10 +124,10 @@ namespace cds {
     }
 
     void bit_vector::bits_write_to_two_cells(
-        unsigned int begin, unsigned int end, unsigned int value, bool bits_reverse
+        unsigned int begin, unsigned int end, unsigned int value, bool is_bits_reverse
     ) {
-        if (bits_reverse) {
-            value = this->bits_reverse(value, end - begin);
+        if (is_bits_reverse) {
+            value = bits_reverse(value, end - begin);
         }
 
         this->vec[begin / this->cell_size] &= (

@@ -6,10 +6,11 @@
 
 
 namespace cds {
+    unsigned int bits_reverse(unsigned int value, unsigned int length);
+    unsigned int bits_length(unsigned int value);
+
     class bit_vector {
         std::vector<unsigned int> vec;
-
-        unsigned int bits_reverse(unsigned int value, unsigned int length);
 
     public:
         const unsigned int cell_size = sizeof(unsigned int) * 8;
