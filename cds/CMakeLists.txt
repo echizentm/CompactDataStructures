@@ -7,4 +7,5 @@ add_library(
     fixed_length_vector.cpp
     sampled_pointers.cpp
     dense_pointers.cpp
+    partial_sums.cpp
 )

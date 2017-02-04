@@ -14,6 +14,11 @@ add_executable(
     variable_length_vector_sample
     variable_length_vector_sample.cpp
 )
+add_executable(
+    partial_sums_sample
+    partial_sums_sample.cpp
+)
 target_link_libraries(bit_vector_sample cds)
 target_link_libraries(fixed_length_vector_sample cds)
 target_link_libraries(variable_length_vector_sample cds)
+target_link_libraries(partial_sums_sample cds)
