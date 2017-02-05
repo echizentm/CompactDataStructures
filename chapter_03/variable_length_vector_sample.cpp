@@ -2,6 +2,7 @@
 #include <vector>
 #include "sampled_pointers.h"
 #include "dense_pointers.h"
+#include "direct_access_codes.h"
 
 
 using namespace std;
@@ -9,14 +10,16 @@ using namespace cds;
 
 
 int main(int argc, char **argv) {
+    vector<int> numbers = {0, 1, 0, 2, 5, 1, 3, 2, 8, 2};
     sampled_pointers sp;
     dense_pointers dp(3);
-    vector<int> numbers = {0, 1, 0, 2, 5, 1, 3, 2, 8, 2};
+    direct_access_codes dac(2, numbers.size());
 
-    for (auto number : numbers) {
-        sp.push_back(number);
-        dp.push_back(number);
-        cout << number << " ";
+    for (int i = 0; i < numbers.size(); i++) {
+        sp.push_back(numbers[i]);
+        dp.push_back(numbers[i]);
+        dac.write(i, numbers[i]);
+        cout << numbers[i] << " ";
     }
     cout << endl;
 
@@ -33,6 +36,13 @@ int main(int argc, char **argv) {
     }
     cout << endl;
     cout << "vector size: " << dp.vector_size() << endl;
+
+    cout << "direct access codes: ";
+    for (int i = 0; i < dp.size; i++) {
+        cout << dac.read(i) << " ";
+    }
+    cout << endl;
+    cout << "vector size: " << dac.vector_size() << endl;
 
     return 0;
 }

@@ -8,4 +8,5 @@ add_library(
     sampled_pointers.cpp
     dense_pointers.cpp
     partial_sums.cpp
+    direct_access_codes.cpp
 )
