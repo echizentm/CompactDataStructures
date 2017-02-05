@@ -1,7 +1,4 @@
-#ifndef CDS_SAMPLED_POINTERS_H
-#define CDS_SAMPLED_POINTERS_H
-
-
+#pragma once
 #include <vector>
 #include "bit_vector.h"
 
@@ -22,6 +19,3 @@ namespace cds {
         void push_back(unsigned int value);
     };
 }
-
-
-#endif // CDS_SAMPLED_POINTERS_H

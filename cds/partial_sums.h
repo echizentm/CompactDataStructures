@@ -1,7 +1,4 @@
-#ifndef CDS_PARTIAL_SUMS_H
-#define CDS_PARTIAL_SUMS_H
-
-
+#pragma once
 #include <vector>
 #include "fixed_length_vector.h"
 
@@ -27,6 +24,3 @@ namespace cds {
         unsigned int search(unsigned int value);
     };
 }
-
-
-#endif // CDS_PARTIAL_SUMS_H

@@ -1,7 +1,4 @@
-#ifndef CDS_BIT_VECTOR_H
-#define CDS_BIT_VECTOR_H
-
-
+#pragma once
 #include <vector>
 
 
@@ -34,6 +31,3 @@ namespace cds {
         void bits_write_to_two_cells(unsigned int begin, unsigned int end, unsigned int value, bool bits_reverse = false);
     };
 }
-
-
-#endif // CDS_BIT_VECTOR_H
