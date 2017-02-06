@@ -6,7 +6,13 @@
 
 namespace cds {
     class direct_access_codes {
+        std::vector<partial_sums> markers;
+        std::vector<fixed_length_vector> blocks;
+
     public:
+        unsigned int length;
+        unsigned int size;
+
         direct_access_codes(unsigned int length, unsigned int size = 0);
 
         void resize(unsigned int size);
