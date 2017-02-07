@@ -38,11 +38,10 @@ int main(int argc, char **argv) {
     cout << "vector size: " << dp.vector_size() << endl;
 
     cout << "direct access codes: ";
-    for (int i = 0; i < dp.size; i++) {
+    for (int i = 0; i < dac.size; i++) {
         cout << dac.read(i) << " ";
     }
     cout << endl;
     cout << "vector size: " << dac.vector_size() << endl;
-
     return 0;
 }
