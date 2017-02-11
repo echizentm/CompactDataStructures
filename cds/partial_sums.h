@@ -5,9 +5,10 @@
 
 namespace cds {
     class partial_sums : public fixed_length_vector {
+        std::vector<unsigned int> samples;
+
     public:
         unsigned int rate;
-        std::vector<unsigned int> samples;
 
         partial_sums(
             unsigned int length,

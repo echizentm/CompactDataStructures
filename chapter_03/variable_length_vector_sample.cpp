@@ -13,12 +13,12 @@ int main(int argc, char **argv) {
     vector<int> numbers = {0, 1, 0, 2, 5, 1, 3, 2, 8, 2};
     sampled_pointers sp;
     dense_pointers dp(3);
-    direct_access_codes dac(2, numbers.size());
+    direct_access_codes dac(2);
 
     for (int i = 0; i < numbers.size(); i++) {
         sp.push_back(numbers[i]);
         dp.push_back(numbers[i]);
-        dac.write(i, numbers[i]);
+        dac.push_back(numbers[i]);
         cout << numbers[i] << " ";
     }
     cout << endl;

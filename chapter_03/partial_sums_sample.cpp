@@ -8,19 +8,17 @@ using namespace cds;
 
 
 int main(int argc, char **argv) {
-    int same_value_size = 8;
-    partial_sums ps(
-        ceil(log2(10 * same_value_size)),
-        4,
-        10 * same_value_size
-    );
+    int same_value_size = 2;
+    partial_sums ps(ceil(log2(10 * same_value_size)), 4, 0);
 
     cout << "write: ";
-    for (int i = 0; i < ps.size; i+=same_value_size) {
+    for (int i = 0; i < 10 * same_value_size; i+=same_value_size) {
+        ps.resize(i + 1);
         ps.write(i, i / same_value_size);
         cout << i / same_value_size << " ";
-        for (int j = 0; j < (same_value_size - 1); j++) {
-            ps.write(i + 1, 0);
+        for (int j = 1; j < same_value_size; j++) {
+            ps.resize(i + j + 1);
+            ps.write(i + j, 0);
             cout << 0 << " ";
         }
     }
@@ -29,12 +27,6 @@ int main(int argc, char **argv) {
     cout << "read: ";
     for (int i = 0; i < ps.size; i++) {
         cout << ps.read(i) << " ";
-    }
-    cout << endl;
-
-    cout << "samples: ";
-    for (int i = 0; i < ps.samples.size(); i++) {
-        cout << ps.samples[i] << " ";
     }
     cout << endl;
 
