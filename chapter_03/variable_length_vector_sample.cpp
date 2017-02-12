@@ -3,6 +3,7 @@
 #include "sampled_pointers.h"
 #include "dense_pointers.h"
 #include "direct_access_codes.h"
+#include "elias_fano_codes.h"
 
 
 using namespace std;
@@ -14,11 +15,13 @@ int main(int argc, char **argv) {
     sampled_pointers sp;
     dense_pointers dp(3);
     direct_access_codes dac(2);
+    elias_fano_codes efc;
 
     for (int i = 0; i < numbers.size(); i++) {
         sp.push_back(numbers[i]);
         dp.push_back(numbers[i]);
         dac.push_back(numbers[i]);
+        efc.push_back(numbers[i]);
         cout << numbers[i] << " ";
     }
     cout << endl;
@@ -43,5 +46,12 @@ int main(int argc, char **argv) {
     }
     cout << endl;
     cout << "vector size: " << dac.vector_size() << endl;
+
+    cout << "elias fano codes: ";
+    for (int i = 0; i < efc.size; i++) {
+        cout << efc.read(i) << " ";
+    }
+    cout << endl;
+    cout << "vector size: " << efc.vector_size() << endl;
     return 0;
 }

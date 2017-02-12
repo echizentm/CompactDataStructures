@@ -1,5 +1,4 @@
 #include "direct_access_codes.h"
-#include <iostream>
 
 
 namespace cds {
@@ -63,9 +62,7 @@ namespace cds {
             } else {
                 break;
             }
-std::cout << value << " : " << index << std::endl;
             index = this->markers[depth].sum(index) - 1;
-std::cout << value << " : " << index << std::endl;
             depth++;
         }
         this->size++;

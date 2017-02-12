@@ -6,10 +6,10 @@
 
 namespace cds {
     class direct_access_codes {
-    public:
         std::vector<partial_sums> markers;
         std::vector<fixed_length_vector> blocks;
 
+    public:
         unsigned int length;
         unsigned int size;
 

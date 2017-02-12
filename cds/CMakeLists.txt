@@ -9,4 +9,5 @@ add_library(
     dense_pointers.cpp
     partial_sums.cpp
     direct_access_codes.cpp
+    elias_fano_codes.cpp
 )
