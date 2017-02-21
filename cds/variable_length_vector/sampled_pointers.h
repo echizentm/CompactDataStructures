@@ -1,16 +1,16 @@
 #pragma once
 #include <vector>
-#include "bit_vector.h"
+#include "../bit_vector.h"
+#include "base.h"
 
 
 namespace cds {
-    class sampled_pointers {
+    class sampled_pointers : virtual public variable_length_vector {
         bit_vector bv;
         std::vector<unsigned int> samples;
 
     public:
         unsigned int rate;
-        unsigned int size;
 
         sampled_pointers(unsigned int rate = 4);
 

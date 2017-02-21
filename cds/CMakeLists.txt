@@ -5,9 +5,9 @@ add_library(
     SHARED
     bit_vector.cpp
     fixed_length_vector.cpp
-    sampled_pointers.cpp
-    dense_pointers.cpp
     partial_sums.cpp
-    direct_access_codes.cpp
-    elias_fano_codes.cpp
+    variable_length_vector/sampled_pointers.cpp
+    variable_length_vector/dense_pointers.cpp
+    variable_length_vector/direct_access_codes.cpp
+    variable_length_vector/elias_fano_codes.cpp
 )

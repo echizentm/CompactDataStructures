@@ -1,17 +1,17 @@
 #pragma once
 #include <vector>
-#include "fixed_length_vector.h"
-#include "partial_sums.h"
+#include "../fixed_length_vector.h"
+#include "../partial_sums.h"
+#include "base.h"
 
 
 namespace cds {
-    class direct_access_codes {
+    class direct_access_codes : virtual public variable_length_vector {
         std::vector<partial_sums> markers;
         std::vector<fixed_length_vector> blocks;
 
     public:
         unsigned int length;
-        unsigned int size;
 
         direct_access_codes(unsigned int length);
 
