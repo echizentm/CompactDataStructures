@@ -7,7 +7,7 @@ namespace cds {
 
     dense_pointers::dense_pointers(
         unsigned int max_length, unsigned int rate
-    ) : offsets(ceil(log2(rate - 1) * max_length)) {
+    ) : offsets(ceil(log2((rate - 1) * max_length))) {
         this->rate = rate;
         this->size = 0;
     }

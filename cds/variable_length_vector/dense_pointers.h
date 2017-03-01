@@ -7,6 +7,7 @@
 
 namespace cds {
     class dense_pointers : virtual public variable_length_vector {
+    public:
         bit_vector bv;
         fixed_length_vector offsets;
         std::vector<unsigned int> samples;

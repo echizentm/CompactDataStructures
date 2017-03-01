@@ -62,7 +62,7 @@ bool run_fixed_length_vector(int length, int num, bool is_rapid) {
 int main(int argc, char **argv) {
     int num = 1000 * 1000;
 
-    vector<int> range(sizeof(int) * 8 - 1);
+    vector<int> range(sizeof(int) * 4 - 1);
     iota(range.begin(), range.end(), 1);
     for (auto length : range) {
         if (!run_vector(length, num)) { cout << "failure!" << endl; return 1; }

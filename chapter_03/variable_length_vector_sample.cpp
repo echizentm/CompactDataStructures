@@ -26,7 +26,9 @@ bool run_variable_length_vector(
 
     int count = 0;
     auto begin_read = system_clock::now();
-    for (auto i : range) { if (vec.read(i) == (i % mod)) { count++; }; }
+    for (auto i : range) { if (vec.read(i) == (i % mod)) { count++; } else {
+        cout << "read(" << i << ") is " << vec.read(i) << " / it must be " << i % mod << endl; break;
+    } }
     auto end_read = system_clock::now();
     cout << "size of vector: " << vec.vector_size() << endl;
     cout << "rate of success: " << count << " / " << range.size() << endl;
@@ -42,14 +44,18 @@ int main(int argc, char **argv) {
     vector<int> range(sizeof(int) * 4 - 1);
     iota(range.begin(), range.end(), 1);
     for (auto length : range) {
-        sampled_pointers sp;
-        dense_pointers dp(length);
-        direct_access_codes dac(2);
-        elias_fano_codes efc;
-        if (!run_variable_length_vector(sp, length, num, "sampled pointers")) { cout << "failure!" << endl; return 1; }
-        if (!run_variable_length_vector(dp, length, num, "dense pointers")) { cout << "failure!" << endl; return 1; }
-        if (!run_variable_length_vector(dac, length, num, "direct access codes")) { cout << "failure!" << endl; return 1; }
-        if (!run_variable_length_vector(efc, length, num, "elias fano codes")) { cout << "failure!" << endl; return 1; }
+        vector<int> params = {4, 8, 16};
+        for (auto param : params) {
+            cout << "parameter: " << param << endl;
+            sampled_pointers sp(param);
+            dense_pointers dp(length, param);
+            direct_access_codes dac(param);
+            elias_fano_codes efc;
+            if (!run_variable_length_vector(sp, length, num, "sampled pointers")) { cout << "failure!" << endl; return 1; }
+            if (!run_variable_length_vector(dp, length, num, "dense pointers")) { cout << "failure!" << endl; return 1; }
+            if (!run_variable_length_vector(dac, length, num, "direct access codes")) { cout << "failure!" << endl; return 1; }
+            if (!run_variable_length_vector(efc, length, num, "elias fano codes")) { cout << "failure!" << endl; return 1; }
+        }
     }
     return 0;
 }
