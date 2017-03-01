@@ -26,9 +26,7 @@ bool run_variable_length_vector(
 
     int count = 0;
     auto begin_read = system_clock::now();
-    for (auto i : range) { if (vec.read(i) == (i % mod)) { count++; } else {
-        cout << "read(" << i << ") is " << vec.read(i) << " / it must be " << i % mod << endl; break;
-    } }
+    for (auto i : range) { if (vec.read(i) == (i % mod)) { count++; } }
     auto end_read = system_clock::now();
     cout << "size of vector: " << vec.vector_size() << endl;
     cout << "rate of success: " << count << " / " << range.size() << endl;
