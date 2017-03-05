@@ -10,4 +10,5 @@ add_library(
     variable_length_vector/dense_pointers.cpp
     variable_length_vector/direct_access_codes.cpp
     variable_length_vector/elias_fano_codes.cpp
+    compressed_bit_vector.cpp
 )
