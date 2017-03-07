@@ -17,7 +17,7 @@ namespace cds {
 
         void resize(unsigned int size);
         unsigned int vector_size();
-        unsigned int bit_read(unsigned int index);
+        unsigned int bit_read(unsigned int index) const;
         void bit_set(unsigned int index);
         void bit_clear(unsigned int index);
 

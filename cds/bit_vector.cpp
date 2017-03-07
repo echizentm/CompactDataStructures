@@ -38,7 +38,7 @@ namespace cds {
         return this->vec.size();
     }
 
-    unsigned int bit_vector::bit_read(unsigned int index) {
+    unsigned int bit_vector::bit_read(unsigned int index) const {
         return this->vec[index / this->cell_size]
                >> (index % this->cell_size) & 1;
     }
