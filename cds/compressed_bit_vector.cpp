@@ -4,10 +4,10 @@
 namespace cds {
     using namespace std;
 
-    void compressed_bit_vector::compute_combinations(unsigned int size) {
-        this->combinations.resize(size);
+    void compressed_bit_vector::compute_combinations(unsigned int block_size) {
+        this->combinations.resize(block_size);
         for (unsigned int i = 0; i < this->combinations.size(); i++) {
-            this->combinations[i].resize(i + 1);
+            this->combinations[i].resize(block_size + 1);
             this->combinations[i][0] = 1;
             this->combinations[i][i] = 1;
         }
@@ -19,6 +19,11 @@ namespace cds {
                     this->combinations[i - 1][j];
             }
         }
+    }
+
+    compressed_bit_vector::compressed_bit_vector(unsigned int block_size) {
+        this->block_size = block_size;
+        this->compute_combinations(this->block_size);
     }
 
     pair<unsigned int, unsigned int> compressed_bit_vector::encode(
@@ -39,5 +44,19 @@ namespace cds {
             begin++;
         }
         return pair<unsigned int, unsigned int>(cclass, offset);
+    }
+
+    bit_vector compressed_bit_vector::decode(unsigned int cclass, unsigned int offset) {
+        bit_vector bv(this->block_size);
+        unsigned int index = 0;
+        while (cclass > 0) {
+            if (offset >= this->combinations[this->block_size - index - 1][cclass]) {
+                bv.bit_set(index);
+                offset -= this->combinations[this->block_size - index - 1][cclass];
+                cclass--;
+            }
+            index++;
+        }
+        return bv;
     }
 }
