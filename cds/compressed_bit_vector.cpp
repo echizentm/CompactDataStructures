@@ -1,3 +1,4 @@
+#include <cmath>
 #include "compressed_bit_vector.h"
 
 
@@ -5,9 +6,9 @@ namespace cds {
     using namespace std;
 
     void compressed_bit_vector::compute_combinations(unsigned int block_size) {
-        this->combinations.resize(block_size);
+        this->combinations.resize(block_size + 1);
         for (unsigned int i = 0; i < this->combinations.size(); i++) {
-            this->combinations[i].resize(block_size + 1);
+            this->combinations[i].resize(this->combinations.size());
             this->combinations[i][0] = 1;
             this->combinations[i][i] = 1;
         }
@@ -19,11 +20,11 @@ namespace cds {
                     this->combinations[i - 1][j];
             }
         }
-    }
 
-    compressed_bit_vector::compressed_bit_vector(unsigned int block_size) {
-        this->block_size = block_size;
-        this->compute_combinations(this->block_size);
+        this->offset_bits.resize(this->combinations.size());
+        for (unsigned int i = 0; i < this->offset_bits.size(); i++) {
+            this->offset_bits[i] = ceil(log2(this->combinations[block_size][i]));
+        }
     }
 
     pair<unsigned int, unsigned int> compressed_bit_vector::encode(
@@ -58,5 +59,44 @@ namespace cds {
             index++;
         }
         return bv;
+    }
+
+
+    compressed_bit_vector::compressed_bit_vector(
+        const bit_vector& bv, unsigned int block_size
+    ) : classes(ceil(log2(block_size + 1))) {
+        this->block_size = block_size;
+        this->compute_combinations(this->block_size);
+
+        this->size = bv.size;
+        this->classes.resize(ceil(this->size / this->block_size ));
+        for (unsigned int i = 0; i < this->classes.size; i++) {
+            pair<unsigned int, unsigned int> encoded = this->encode(
+                bv, i * this->block_size, (i + 1) * this->block_size
+            );
+
+            this->classes.write(i, encoded.first);
+
+            unsigned int begin = this->offsets.size;
+            unsigned int end = this->offsets.size + this->offset_bits[encoded.first];
+            this->offsets.resize(end);
+            this->offsets.bits_write(begin, end, encoded.second);
+        }
+    }
+
+    unsigned int compressed_bit_vector::vector_size() {
+        return this->classes.vector_size() + this->offsets.vector_size();
+    }
+
+    unsigned int compressed_bit_vector::access(unsigned int index) {
+        unsigned int begin = 0;
+        unsigned int end = 0;
+        for (unsigned int i = 0; i <= ceil(index / this->block_size); i++) {
+            begin = end;
+            end += this->offset_bits[this->classes.read(i)];
+        }
+        unsigned int cclass = this->classes.read(ceil(index / this->block_size));
+        unsigned int offset = (begin == end) ? 0 : this->offsets.bits_read(begin, end);
+        return this->decode(cclass, offset).bit_read(index % this->block_size);
     }
 }
