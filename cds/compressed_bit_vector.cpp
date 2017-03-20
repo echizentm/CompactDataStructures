@@ -63,13 +63,14 @@ namespace cds {
 
 
     compressed_bit_vector::compressed_bit_vector(
-        const bit_vector& bv, unsigned int block_size
+        const bit_vector& bv, unsigned int block_size, unsigned int sampling_rate
     ) : classes(ceil(log2(block_size + 1))) {
         this->block_size = block_size;
+        this->sampling_rate = sampling_rate;
         this->compute_combinations(this->block_size);
 
         this->size = bv.size;
-        this->classes.resize(ceil(this->size / this->block_size ));
+        this->classes.resize(ceil(this->size / this->block_size));
         for (unsigned int i = 0; i < this->classes.size; i++) {
             pair<unsigned int, unsigned int> encoded = this->encode(
                 bv, i * this->block_size, (i + 1) * this->block_size
@@ -79,23 +80,34 @@ namespace cds {
 
             unsigned int begin = this->offsets.size;
             unsigned int end = this->offsets.size + this->offset_bits[encoded.first];
-            this->offsets.resize(end);
-            this->offsets.bits_write(begin, end, encoded.second);
+            if (begin < end) {
+                this->offsets.resize(end);
+                this->offsets.bits_write(begin, end, encoded.second);
+            }
+
+            if ((i % this->sampling_rate) == 0) {
+                this->offset_samples.push_back(begin);
+            }
         }
     }
 
     unsigned int compressed_bit_vector::vector_size() {
-        return this->classes.vector_size() + this->offsets.vector_size();
+        unsigned int combinations_size = 0;
+        for (auto e : this->combinations) { combinations_size += e.size(); }
+        return combinations_size + this->offset_bits.size() + this->offset_samples.size() +
+               this->classes.vector_size() + this->offsets.vector_size();
     }
 
     unsigned int compressed_bit_vector::access(unsigned int index) {
-        unsigned int begin = 0;
-        unsigned int end = 0;
-        for (unsigned int i = 0; i <= ceil(index / this->block_size); i++) {
+        unsigned int sample_index = index / this->block_size / this->sampling_rate;
+        unsigned int begin = this->offset_samples[sample_index];
+        unsigned int end = begin;
+        unsigned int cclass = 0;
+        for (unsigned int i = sample_index * this->sampling_rate; i <= (index / this->block_size); i++) {
+            cclass = this->classes.read(i);
             begin = end;
-            end += this->offset_bits[this->classes.read(i)];
+            end += this->offset_bits[cclass];
         }
-        unsigned int cclass = this->classes.read(ceil(index / this->block_size));
         unsigned int offset = (begin == end) ? 0 : this->offsets.bits_read(begin, end);
         return this->decode(cclass, offset).bit_read(index % this->block_size);
     }
