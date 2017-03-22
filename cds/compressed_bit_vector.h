@@ -2,7 +2,6 @@
 #include <vector>
 #include <map>
 #include "bit_vector.h"
-#include "fixed_length_vector.h"
 
 
 namespace cds {
@@ -10,7 +9,7 @@ namespace cds {
         std::vector<std::vector<unsigned int> > combinations;
         std::vector<unsigned int> offset_bits;
         std::vector<unsigned int> offset_samples;
-        fixed_length_vector classes;
+        std::vector<unsigned char> classes;
         bit_vector offsets;
 
         void compute_combinations(unsigned int block_size);
@@ -21,11 +20,11 @@ namespace cds {
         bit_vector decode(unsigned int cclass, unsigned int offset);
 
     public:
-        unsigned int block_size;
+        unsigned int block_size = sizeof(unsigned int) * 8 - 1;
         unsigned int sampling_rate;
         unsigned int size;
 
-        compressed_bit_vector(const bit_vector& bv, unsigned int block_size = 31, unsigned int sampling_rate = 32);
+        compressed_bit_vector(const bit_vector& bv, unsigned int sampling_rate = 32);
 
         unsigned int vector_size();
         unsigned int access(unsigned int index);
