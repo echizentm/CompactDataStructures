@@ -11,13 +11,14 @@ namespace cds {
         std::vector<unsigned int> offset_samples;
         std::vector<unsigned char> classes;
         bit_vector offsets;
+        bit_vector decoded_bv;
 
         void compute_combinations(unsigned int block_size);
 
         std::pair<unsigned int, unsigned int> encode(
             const bit_vector &bv, unsigned int begin, unsigned int end
         );
-        bit_vector decode(unsigned int cclass, unsigned int offset);
+        const bit_vector &decode(unsigned int cclass, unsigned int offset);
 
     public:
         unsigned int block_size = sizeof(unsigned int) * 8 - 1;

@@ -47,18 +47,18 @@ namespace cds {
         return pair<unsigned int, unsigned int>(cclass, offset);
     }
 
-    bit_vector compressed_bit_vector::decode(unsigned int cclass, unsigned int offset) {
-        bit_vector bv(this->block_size);
+    const bit_vector &compressed_bit_vector::decode(unsigned int cclass, unsigned int offset) {
+        this->decoded_bv.bits_write(0, this->decoded_bv.size, 0);
         unsigned int index = 0;
         while (cclass > 0) {
             if (offset >= this->combinations[this->block_size - index - 1][cclass]) {
-                bv.bit_set(index);
+                this->decoded_bv.bit_set(index);
                 offset -= this->combinations[this->block_size - index - 1][cclass];
                 cclass--;
             }
             index++;
         }
-        return bv;
+        return this->decoded_bv;
     }
 
 
@@ -67,6 +67,7 @@ namespace cds {
     ) {
         this->sampling_rate = sampling_rate;
         this->compute_combinations(this->block_size);
+        this->decoded_bv.resize(this->block_size);
 
         this->size = bv.size;
         this->classes.resize(ceil(this->size / this->block_size));
