@@ -47,18 +47,21 @@ namespace cds {
         return pair<unsigned int, unsigned int>(cclass, offset);
     }
 
-    const bit_vector &compressed_bit_vector::decode(unsigned int cclass, unsigned int offset) {
-        this->decoded_bv.bits_write(0, this->decoded_bv.size, 0);
-        unsigned int index = 0;
+    unsigned int compressed_bit_vector::decode(
+        unsigned int cclass, unsigned int offset, unsigned int index
+    ) {
+        unsigned int index_tmp = 0;
         while (cclass > 0) {
-            if (offset >= this->combinations[this->block_size - index - 1][cclass]) {
-                this->decoded_bv.bit_set(index);
-                offset -= this->combinations[this->block_size - index - 1][cclass];
+            unsigned int bit = 0;
+            if (offset >= this->combinations[this->block_size - index_tmp - 1][cclass]) {
+                offset -= this->combinations[this->block_size - index_tmp - 1][cclass];
                 cclass--;
+                bit = 1;
             }
-            index++;
+            if (index_tmp == index) { return bit; }
+            index_tmp++;
         }
-        return this->decoded_bv;
+        return 0;
     }
 
 
@@ -67,7 +70,6 @@ namespace cds {
     ) {
         this->sampling_rate = sampling_rate;
         this->compute_combinations(this->block_size);
-        this->decoded_bv.resize(this->block_size);
 
         this->size = bv.size;
         this->classes.resize(ceil(this->size / this->block_size));
@@ -108,7 +110,10 @@ namespace cds {
             begin = end;
             end += this->offset_bits[cclass];
         }
-        unsigned int offset = (begin == end) ? 0 : this->offsets.bits_read(begin, end);
-        return this->decode(cclass, offset).bit_read(index % this->block_size);
+        return this->decode(
+            cclass,
+            (begin == end) ? 0 : this->offsets.bits_read(begin, end),
+            index % this->block_size
+        );
     }
 }
