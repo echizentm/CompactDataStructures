@@ -2,7 +2,7 @@
 
 
 namespace cds {
-    unsigned int fixed_length_vector::get_bit_index(unsigned int index) {
+    uint64_t fixed_length_vector::get_bit_index(uint64_t index) {
         return (
             (this->is_rapid && this->rest_size_of_a_cell > 0) ?
             index / this->elements_in_a_cell * this->bv.cell_size + index % this->elements_in_a_cell * this->length :
@@ -10,7 +10,7 @@ namespace cds {
         );
     }
 
-    fixed_length_vector::fixed_length_vector(unsigned int length, unsigned int size, bool is_rapid) {
+    fixed_length_vector::fixed_length_vector(uint64_t length, uint64_t size, bool is_rapid) {
         this->length = length;
         this->is_rapid = is_rapid;
         this->elements_in_a_cell = bv.cell_size / this->length;
@@ -18,17 +18,17 @@ namespace cds {
         resize(size);
     }
 
-    void fixed_length_vector::resize(unsigned int size) {
+    void fixed_length_vector::resize(uint64_t size) {
         this->size = size;
         this->bv.resize(this->get_bit_index(this->size));
     }
 
-    unsigned int fixed_length_vector::vector_size() {
+    uint64_t fixed_length_vector::vector_size() {
         return this->bv.vector_size();
     }
 
-    unsigned int fixed_length_vector::read(unsigned int index) {
-        unsigned int bit_index = this->get_bit_index(index);
+    uint64_t fixed_length_vector::read(uint64_t index) {
+        uint64_t bit_index = this->get_bit_index(index);
 
         if (this->is_rapid || this->rest_size_of_a_cell == 0) {
             return this->bv.bits_read_from_a_cell(bit_index, bit_index + this->length);
@@ -37,8 +37,8 @@ namespace cds {
         }
     }
 
-    void fixed_length_vector::write(unsigned int index, unsigned int value) {
-        unsigned int bit_index = this->get_bit_index(index);
+    void fixed_length_vector::write(uint64_t index, uint64_t value) {
+        uint64_t bit_index = this->get_bit_index(index);
 
         if (this->is_rapid || this->rest_size_of_a_cell == 0) {
             this->bv.bits_write_to_a_cell(bit_index, bit_index + this->length, value);

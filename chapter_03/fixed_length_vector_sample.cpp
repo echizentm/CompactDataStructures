@@ -12,7 +12,7 @@ using namespace cds;
 
 
 bool run_vector(int length, int num) {
-    vector<unsigned int> vec(num);
+    vector<uint64_t> vec(num);
     vector<int> range(num);
     iota(range.begin(), range.end(), 0);
     int mod = pow(2, length);

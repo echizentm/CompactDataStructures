@@ -11,6 +11,7 @@ using namespace cds;
 int main(int argc, char **argv) {
     bit_vector bv;
     bv.resize(bv.cell_size * 3);
+
     bv.bit_set(0);
     bv.bit_set(bv.cell_size - 1);
     bv.bit_set(bv.cell_size + 1);

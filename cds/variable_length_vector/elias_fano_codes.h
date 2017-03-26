@@ -12,8 +12,8 @@ namespace cds {
     public:
         elias_fano_codes();
 
-        unsigned int vector_size();
-        unsigned int read(unsigned int index);
-        void push_back(unsigned int value);
+        uint64_t vector_size();
+        uint64_t read(uint64_t index);
+        void push_back(uint64_t value);
     };
 }

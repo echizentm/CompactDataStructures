@@ -6,9 +6,9 @@ namespace cds {
     using namespace std;
 
     partial_sums::partial_sums(
-        unsigned int length,
-        unsigned int rate,
-        unsigned int size,
+        uint64_t length,
+        uint64_t rate,
+        uint64_t size,
         bool is_rapid
     ) : fixed_length_vector(length, size, is_rapid) {
         this->rate = rate;
@@ -16,7 +16,7 @@ namespace cds {
     }
 
 
-    void partial_sums::resize(unsigned int size) {
+    void partial_sums::resize(uint64_t size) {
         fixed_length_vector::resize(size);
         this->samples.resize(
             (size + this->rate - 2) / this->rate + 1,
@@ -24,12 +24,12 @@ namespace cds {
         );
     }
 
-    unsigned int partial_sums::vector_size() {
+    uint64_t partial_sums::vector_size() {
         return fixed_length_vector::vector_size() + this->samples.size();
     }
 
-    void partial_sums::write(unsigned int index, unsigned int value) {
-        unsigned int pos = (index + this->rate - 1)  / this->rate;
+    void partial_sums::write(uint64_t index, uint64_t value) {
+        uint64_t pos = (index + this->rate - 1)  / this->rate;
         while (pos < this->samples.size()) {
             this->samples[pos] += (value - this->read(index));
             pos++;
@@ -38,9 +38,9 @@ namespace cds {
     }
 
 
-    unsigned int partial_sums::sum(unsigned int index) {
-        unsigned int pos = index / this->rate;
-        unsigned int sum = this->samples[pos];
+    uint64_t partial_sums::sum(uint64_t index) {
+        uint64_t pos = index / this->rate;
+        uint64_t sum = this->samples[pos];
         pos = pos * this->rate + 1;
         while (pos <= index) {
             sum += this->read(pos);
@@ -49,18 +49,18 @@ namespace cds {
         return sum;
     }
 
-    unsigned int partial_sums::search(unsigned int value) {
+    uint64_t partial_sums::search(uint64_t value) {
         if (value <= *(this->samples.begin())) {
             return 0;
         }
 
-        vector<unsigned int>::iterator it = lower_bound(
+        vector<uint64_t>::iterator it = lower_bound(
             this->samples.begin(), this->samples.end(), value
         );
         it--;
 
-        unsigned int sum = *it;
-        unsigned int pos = distance(this->samples.begin(), it) * this->rate;
+        uint64_t sum = *it;
+        uint64_t pos = distance(this->samples.begin(), it) * this->rate;
         while (sum < value && pos < this->size) {
             pos++;
             sum += this->read(pos);

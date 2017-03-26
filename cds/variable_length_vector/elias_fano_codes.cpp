@@ -8,24 +8,24 @@ namespace cds {
         this->marker.write(0, 1);
     }
 
-    unsigned int elias_fano_codes::vector_size() {
+    uint64_t elias_fano_codes::vector_size() {
         return this->bv.vector_size() + this->marker.vector_size();
     }
 
-    unsigned int elias_fano_codes::read(unsigned int index) {
-        unsigned int begin = this->marker.search(index + 1);
-        unsigned int end = this->marker.search(index + 2);
+    uint64_t elias_fano_codes::read(uint64_t index) {
+        uint64_t begin = this->marker.search(index + 1);
+        uint64_t end = this->marker.search(index + 2);
 
-        unsigned int value = this->bv.bits_read(begin, end);
-        return (value | (1 << (end - begin))) - 2;
+        uint64_t value = this->bv.bits_read(begin, end);
+        return (value | (1LL << (end - begin))) - 2;
     }
 
-    void elias_fano_codes::push_back(unsigned int value) {
+    void elias_fano_codes::push_back(uint64_t value) {
         this->size++;
 
         value += 2;
-        unsigned int length = bits_length(value) - 1;
-        value &= ((1 << length) - 1);
+        uint64_t length = bits_length(value) - 1;
+        value &= ((1LL << length) - 1);
         this->bv.resize(this->bv.size + length);
         this->marker.resize(this->marker.size + length);
 

@@ -5,21 +5,21 @@
 namespace cds {
     class fixed_length_vector {
         bit_vector bv;
-        unsigned int elements_in_a_cell;
-        unsigned int rest_size_of_a_cell;
+        uint64_t elements_in_a_cell;
+        uint64_t rest_size_of_a_cell;
 
-        unsigned int get_bit_index(unsigned int index);
+        uint64_t get_bit_index(uint64_t index);
 
     public:
-        unsigned int length;
-        unsigned int size;
+        uint64_t length;
+        uint64_t size;
         bool is_rapid;
 
-        fixed_length_vector(unsigned int length, unsigned int size = 0, bool is_rapid = false);
+        fixed_length_vector(uint64_t length, uint64_t size = 0, bool is_rapid = false);
 
-        void resize(unsigned int size);
-        unsigned int vector_size();
-        unsigned int read(unsigned int index);
-        void write(unsigned int index, unsigned int value);
+        void resize(uint64_t size);
+        uint64_t vector_size();
+        uint64_t read(uint64_t index);
+        void write(uint64_t index, uint64_t value);
     };
 }

@@ -6,27 +6,27 @@
 
 namespace cds {
     class compressed_bit_vector {
-        std::vector<std::vector<unsigned int> > combinations;
-        std::vector<unsigned int> offset_bits;
-        std::vector<unsigned int> offset_samples;
-        std::vector<unsigned char> classes;
+        std::vector<std::vector<uint64_t> > combinations;
+        std::vector<uint64_t> offset_bits;
+        std::vector<uint64_t> offset_samples;
+        std::vector<uint8_t> classes;
         bit_vector offsets;
 
-        void compute_combinations(unsigned int block_size);
+        void compute_combinations(uint64_t block_size);
 
-        std::pair<unsigned int, unsigned int> encode(
-            const bit_vector &bv, unsigned int begin, unsigned int end
+        std::pair<uint64_t, uint64_t> encode(
+            const bit_vector &bv, uint64_t begin, uint64_t end
         );
-        unsigned int decode(unsigned int cclass, unsigned int offset, unsigned int index);
+        uint64_t decode(uint64_t cclass, uint64_t offset, uint64_t index);
 
     public:
-        unsigned int block_size = sizeof(unsigned int) * 8 - 1;
-        unsigned int sampling_rate;
-        unsigned int size;
+        const uint64_t block_size = sizeof(uint64_t) * 8 - 1;
+        const uint64_t sampling_rate = sizeof(uint64_t) * 8 - 1;
+        uint64_t size;
 
-        compressed_bit_vector(const bit_vector& bv, unsigned int sampling_rate = 32);
+        compressed_bit_vector(const bit_vector& bv);
 
-        unsigned int vector_size();
-        unsigned int access(unsigned int index);
+        uint64_t vector_size();
+        uint64_t access(uint64_t index);
     };
 }

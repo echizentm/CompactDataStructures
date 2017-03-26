@@ -11,12 +11,12 @@ namespace cds {
         std::vector<fixed_length_vector> blocks;
 
     public:
-        unsigned int length;
+        uint64_t length;
 
-        direct_access_codes(unsigned int length);
+        direct_access_codes(uint64_t length);
 
-        unsigned int vector_size();
-        unsigned int read(unsigned int index);
-        void push_back(unsigned int value);
+        uint64_t vector_size();
+        uint64_t read(uint64_t index);
+        void push_back(uint64_t value);
     };
 }

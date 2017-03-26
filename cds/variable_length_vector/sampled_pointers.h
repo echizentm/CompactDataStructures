@@ -7,15 +7,15 @@
 namespace cds {
     class sampled_pointers : virtual public variable_length_vector {
         bit_vector bv;
-        std::vector<unsigned int> samples;
+        std::vector<uint64_t> samples;
 
     public:
-        unsigned int rate;
+        uint64_t rate;
 
-        sampled_pointers(unsigned int rate = 4);
+        sampled_pointers(uint64_t rate = 4);
 
-        unsigned int vector_size();
-        unsigned int read(unsigned int index);
-        void push_back(unsigned int value);
+        uint64_t vector_size();
+        uint64_t read(uint64_t index);
+        void push_back(uint64_t value);
     };
 }
