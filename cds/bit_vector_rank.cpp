@@ -47,7 +47,7 @@ namespace cds {
             this->samples[pos]--;
             pos++;
         }
-        bit_vector::bit_set(index);
+        bit_vector::bit_clear(index);
     }
 
     uint64_t bit_vector_rank::rank(uint64_t index) const {
