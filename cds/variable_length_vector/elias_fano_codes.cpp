@@ -8,11 +8,11 @@ namespace cds {
         this->marker.write(0, 1);
     }
 
-    uint64_t elias_fano_codes::vector_size() {
+    uint64_t elias_fano_codes::vector_size() const {
         return this->bv.vector_size() + this->marker.vector_size();
     }
 
-    uint64_t elias_fano_codes::read(uint64_t index) {
+    uint64_t elias_fano_codes::read(uint64_t index) const {
         uint64_t begin = this->marker.search(index + 1);
         uint64_t end = this->marker.search(index + 2);
 

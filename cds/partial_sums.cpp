@@ -5,12 +5,8 @@
 namespace cds {
     using namespace std;
 
-    partial_sums::partial_sums(
-        uint64_t length,
-        uint64_t rate,
-        uint64_t size,
-        bool is_rapid
-    ) : fixed_length_vector(length, size, is_rapid) {
+    partial_sums::partial_sums(uint64_t length, uint64_t rate, uint64_t size, bool is_rapid)
+    : fixed_length_vector(length, size, is_rapid) {
         this->rate = rate;
         this->resize(size);
     }
@@ -24,7 +20,7 @@ namespace cds {
         );
     }
 
-    uint64_t partial_sums::vector_size() {
+    uint64_t partial_sums::vector_size() const {
         return fixed_length_vector::vector_size() + this->samples.size();
     }
 
@@ -38,7 +34,7 @@ namespace cds {
     }
 
 
-    uint64_t partial_sums::sum(uint64_t index) {
+    uint64_t partial_sums::sum(uint64_t index) const {
         uint64_t pos = index / this->rate;
         uint64_t sum = this->samples[pos];
         pos = pos * this->rate + 1;
@@ -49,12 +45,12 @@ namespace cds {
         return sum;
     }
 
-    uint64_t partial_sums::search(uint64_t value) {
+    uint64_t partial_sums::search(uint64_t value) const {
         if (value <= *(this->samples.begin())) {
             return 0;
         }
 
-        vector<uint64_t>::iterator it = lower_bound(
+        vector<uint64_t>::const_iterator it = lower_bound(
             this->samples.begin(), this->samples.end(), value
         );
         it--;

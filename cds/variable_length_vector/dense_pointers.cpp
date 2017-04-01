@@ -5,20 +5,19 @@
 namespace cds {
     using namespace std;
 
-    dense_pointers::dense_pointers(
-        uint64_t max_length, uint64_t rate
-    ) : offsets(ceil(log2((rate - 1) * max_length))) {
+    dense_pointers::dense_pointers(uint64_t max_length, uint64_t rate)
+    : offsets(ceil(log2((rate - 1) * max_length))) {
         this->rate = rate;
         this->size = 0;
     }
 
-    uint64_t dense_pointers::vector_size() {
+    uint64_t dense_pointers::vector_size() const {
         return this->bv.vector_size() +
                this->offsets.vector_size() +
                this->samples.size();
     }
 
-    uint64_t dense_pointers::read(uint64_t index) {
+    uint64_t dense_pointers::read(uint64_t index) const {
         uint64_t begin = this->samples[index / this->rate] +
                              this->offsets.read(index);
         uint64_t end = this->bv.size;

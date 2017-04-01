@@ -34,7 +34,7 @@ namespace cds {
         };
     }
 
-    uint64_t bit_vector::vector_size() {
+    uint64_t bit_vector::vector_size() const {
         return this->vec.size();
     }
 
@@ -51,7 +51,7 @@ namespace cds {
     }
 
 
-    uint64_t bit_vector::bits_read(uint64_t begin, uint64_t end, bool is_bits_reverse) {
+    uint64_t bit_vector::bits_read(uint64_t begin, uint64_t end, bool is_bits_reverse) const {
         if (this->is_in_a_cell(begin, end)) {
             return this->bits_read_from_a_cell(begin, end, is_bits_reverse);
         } else {
@@ -68,18 +68,18 @@ namespace cds {
     }
 
 
-    bool bit_vector::is_in_a_cell(uint64_t begin, uint64_t end) {
+    bool bit_vector::is_in_a_cell(uint64_t begin, uint64_t end) const {
         return ((begin / this->cell_size) == ((end - 1) / this->cell_size));
     }
 
-    uint64_t bit_vector::bits_read_from_a_cell(uint64_t begin, uint64_t end, bool is_bits_reverse) {
+    uint64_t bit_vector::bits_read_from_a_cell(uint64_t begin, uint64_t end, bool is_bits_reverse) const {
        uint64_t value = this->vec[(end - 1) / this->cell_size] >> (begin % this->cell_size);
        if ((end - begin) < this->cell_size) { value &= ((1LL << (end - begin)) - 1); }
        if (is_bits_reverse) { value = bits_reverse(value, end - begin); }
        return value;
     }
 
-    uint64_t bit_vector::bits_read_from_two_cells(uint64_t begin, uint64_t end, bool is_bits_reverse) {
+    uint64_t bit_vector::bits_read_from_two_cells(uint64_t begin, uint64_t end, bool is_bits_reverse) const {
         uint64_t value = (this->vec[begin / this->cell_size] >> (begin % this->cell_size))
             | (
                 (this->vec[(end - 1) / this->cell_size] & ((1LL << (end % this->cell_size)) - 1))

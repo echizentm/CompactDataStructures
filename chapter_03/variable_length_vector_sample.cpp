@@ -39,10 +39,10 @@ bool run_variable_length_vector(
 int main(int argc, char **argv) {
     int num = 1000 * 1000;
 
-    vector<int> range(sizeof(int) * 4 - 1);
+    vector<int> range(sizeof(int) * 2 - 1);
     iota(range.begin(), range.end(), 1);
     for (auto length : range) {
-        vector<int> params = {4, 8, 16};
+        vector<int> params = {4, 8};
         for (auto param : params) {
             cout << "parameter: " << param << endl;
             sampled_pointers sp(param);

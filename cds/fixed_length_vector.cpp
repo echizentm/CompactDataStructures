@@ -2,7 +2,7 @@
 
 
 namespace cds {
-    uint64_t fixed_length_vector::get_bit_index(uint64_t index) {
+    uint64_t fixed_length_vector::get_bit_index(uint64_t index) const {
         return (
             (this->is_rapid && this->rest_size_of_a_cell > 0) ?
             index / this->elements_in_a_cell * this->bv.cell_size + index % this->elements_in_a_cell * this->length :
@@ -23,11 +23,11 @@ namespace cds {
         this->bv.resize(this->get_bit_index(this->size));
     }
 
-    uint64_t fixed_length_vector::vector_size() {
+    uint64_t fixed_length_vector::vector_size() const {
         return this->bv.vector_size();
     }
 
-    uint64_t fixed_length_vector::read(uint64_t index) {
+    uint64_t fixed_length_vector::read(uint64_t index) const {
         uint64_t bit_index = this->get_bit_index(index);
 
         if (this->is_rapid || this->rest_size_of_a_cell == 0) {

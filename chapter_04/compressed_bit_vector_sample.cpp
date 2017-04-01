@@ -9,7 +9,7 @@ using namespace cds;
 
 
 int main(int argc, char **argv) {
-    int max = 1000;
+    int max = 5000;
     bit_vector bv((1 + max) * max / 2 + max);
     int sum = 0;
     for (int i = 0; i < max; i++) {

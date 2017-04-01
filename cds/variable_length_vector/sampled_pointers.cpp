@@ -7,11 +7,11 @@ namespace cds {
         this->size = 0;
     }
 
-    uint64_t sampled_pointers::vector_size() {
+    uint64_t sampled_pointers::vector_size() const {
         return this->bv.vector_size() + this->samples.size();
     }
 
-    uint64_t sampled_pointers::read(uint64_t index) {
+    uint64_t sampled_pointers::read(uint64_t index) const {
         uint64_t begin = this->samples[index / this->rate];
         uint64_t values_to_read = index % this->rate;
 

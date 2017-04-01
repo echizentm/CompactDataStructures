@@ -14,10 +14,8 @@ namespace cds {
 
         void compute_combinations(uint64_t block_size);
 
-        std::pair<uint64_t, uint64_t> encode(
-            const bit_vector &bv, uint64_t begin, uint64_t end
-        );
-        uint64_t decode(uint64_t cclass, uint64_t offset, uint64_t index);
+        std::pair<uint64_t, uint64_t> encode(const bit_vector &bv, uint64_t begin, uint64_t end) const;
+        uint64_t decode(uint64_t cclass, uint64_t offset, uint64_t index) const;
 
     public:
         const uint64_t block_size = sizeof(uint64_t) * 8 - 1;
@@ -26,7 +24,7 @@ namespace cds {
 
         compressed_bit_vector(const bit_vector& bv);
 
-        uint64_t vector_size();
-        uint64_t access(uint64_t index);
+        uint64_t vector_size() const;
+        uint64_t access(uint64_t index) const;
     };
 }

@@ -16,8 +16,8 @@ namespace cds {
 
         dense_pointers(uint64_t max_length, uint64_t rate = 4);
 
-        uint64_t vector_size();
-        uint64_t read(uint64_t index);
+        uint64_t vector_size() const;
+        uint64_t read(uint64_t index) const;
         void push_back(uint64_t value);
     };
 }

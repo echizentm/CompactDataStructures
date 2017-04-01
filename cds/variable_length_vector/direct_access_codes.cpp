@@ -9,7 +9,7 @@ namespace cds {
         this->blocks.push_back(fixed_length_vector(this->length));
     }
 
-    uint64_t direct_access_codes::vector_size() {
+    uint64_t direct_access_codes::vector_size() const {
         uint64_t vector_size = 0;
         for (auto marker : this->markers) {
             vector_size += marker.vector_size();
@@ -20,7 +20,7 @@ namespace cds {
         return vector_size;
     }
 
-    uint64_t direct_access_codes::read(uint64_t index) {
+    uint64_t direct_access_codes::read(uint64_t index) const {
         uint64_t value = 0;
         uint64_t depth = 0;
         while (1) {

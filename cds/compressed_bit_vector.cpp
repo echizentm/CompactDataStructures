@@ -27,7 +27,7 @@ namespace cds {
         }
     }
 
-    pair<uint64_t, uint64_t> compressed_bit_vector::encode(const bit_vector &bv, uint64_t begin, uint64_t end) {
+    pair<uint64_t, uint64_t> compressed_bit_vector::encode(const bit_vector &bv, uint64_t begin, uint64_t end) const {
         uint64_t cclass = 0;
         for (uint64_t i = begin; i < end; i++) {
             cclass += bv.bit_read(i);
@@ -45,7 +45,7 @@ namespace cds {
         return pair<uint64_t, uint64_t>(cclass, offset);
     }
 
-    uint64_t compressed_bit_vector::decode(uint64_t cclass, uint64_t offset, uint64_t index) {
+    uint64_t compressed_bit_vector::decode(uint64_t cclass, uint64_t offset, uint64_t index) const {
         uint64_t index_tmp = 0;
         while (cclass > 0) {
             uint64_t bit = 0;
@@ -86,14 +86,14 @@ namespace cds {
         }
     }
 
-    uint64_t compressed_bit_vector::vector_size() {
+    uint64_t compressed_bit_vector::vector_size() const {
         uint64_t combinations_size = 0;
         for (auto e : this->combinations) { combinations_size += e.size(); }
         return combinations_size + this->offset_bits.size() + this->offset_samples.size() +
                this->classes.size() * sizeof(uint8_t) / sizeof(uint64_t) + this->offsets.vector_size();
     }
 
-    uint64_t compressed_bit_vector::access(uint64_t index) {
+    uint64_t compressed_bit_vector::access(uint64_t index) const {
         uint64_t sample_index = index / this->block_size / this->sampling_rate;
         uint64_t begin = this->offset_samples[sample_index];
         uint64_t end = begin;
