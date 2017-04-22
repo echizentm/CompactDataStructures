@@ -65,7 +65,9 @@ namespace cds {
         this->compute_combinations(this->block_size);
 
         this->size = bv.size;
-        this->classes.resize(ceil(this->size / this->block_size));
+        if (this->size > 0) {
+            this->classes.resize((this->size - 1) / this->block_size + 1);
+        }
         for (uint64_t i = 0; i < this->classes.size(); i++) {
             pair<uint64_t, uint64_t> encoded = this->encode(
                 bv, i * this->block_size, (i + 1) * this->block_size

@@ -7,12 +7,16 @@ namespace cds {
     uint64_t popcount(uint64_t bits);
 
     class bit_vector_rank : public bit_vector {
-        std::vector<uint64_t> samples;
+    public:
+        std::vector<uint64_t> sample_ranks;
+        std::vector<uint16_t> cell_ranks;
+
+        void bit_write(uint64_t index, bool is_set);
 
     public:
         uint64_t rate;
 
-        bit_vector_rank(uint64_t rate = 4, uint64_t size = 0);
+        bit_vector_rank(uint64_t rate = 64, uint64_t size = 0);
 
         void resize(uint64_t size);
         uint64_t vector_size() const;
