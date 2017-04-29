@@ -12,4 +12,5 @@ add_library(
     variable_length_vector/elias_fano_codes.cpp
     compressed_bit_vector.cpp
     bit_vector_rank.cpp
+    compressed_bit_vector_rank.cpp
 )

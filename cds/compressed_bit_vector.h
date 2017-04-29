@@ -6,6 +6,7 @@
 
 namespace cds {
     class compressed_bit_vector {
+    protected:
         std::vector<std::vector<uint64_t> > combinations;
         std::vector<uint64_t> offset_bits;
         std::vector<uint64_t> offset_samples;
@@ -15,7 +16,7 @@ namespace cds {
         void compute_combinations(uint64_t block_size);
 
         std::pair<uint64_t, uint64_t> encode(const bit_vector &bv, uint64_t begin, uint64_t end) const;
-        uint64_t decode(uint64_t cclass, uint64_t offset, uint64_t index) const;
+        uint64_t decode(uint64_t cclass, uint64_t offset, uint64_t index, bool is_rank = false) const;
 
     public:
         const uint64_t block_size = sizeof(uint64_t) * 8 - 1;
