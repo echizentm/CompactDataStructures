@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
     cout << endl;
 
 
-    cout << "# bit vector + rank #" << endl;
+    cout << "# bit vector + rank + select #" << endl;
     bit_vector_rank bvr(63);
 
     for (int i = 0; i < size; i++) { if (i % bit_set_rate == 0) { bvr.bit_set(i); } }
@@ -49,6 +49,12 @@ int main(int argc, char **argv) {
     cout << "validate rank" << endl;
     for (int i = 0; i < validate_size; i++) {
         if (bvr.rank(i) != bvr.rank_naive(i)) { cout << "failure." << endl; return 0; }
+    }
+    cout << "success." << endl;
+
+    cout << "validate select" << endl;
+    for (int i = 0; i < bvr.rank(bvr.size); i++) {
+        if (bvr.rank(bvr.select(i)) != i) { cout << "failure." << endl; return 0; }
     }
     cout << "success." << endl;
 
@@ -63,16 +69,27 @@ int main(int argc, char **argv) {
     for (int i = 0; i < bvr.size; i++) { bvr.rank(i); }
     end_read = system_clock::now();
     cout << "rank time(msec): " << duration_cast<milliseconds>(end_read - begin_read).count() << endl;
+
+    begin_read = system_clock::now();
+    for (int i = 0; i < bvr.rank(bvr.size); i++) { bvr.select(i); }
+    end_read = system_clock::now();
+    cout << "select time(msec): " << duration_cast<milliseconds>(end_read - begin_read).count() << endl;
     cout << endl;
 
 
-    cout << "# compressed  bit vector + rank #" << endl;
+    cout << "# compressed  bit vector + rank + select #" << endl;
 
     compressed_bit_vector_rank cbvr(bv);
 
     cout << "validate rank" << endl;
     for (int i = 0; i < validate_size; i++) {
         if (cbvr.rank(i) != bvr.rank_naive(i)) { cout << "failure." << endl; return 0; }
+    }
+    cout << "success." << endl;
+
+    cout << "validate select" << endl;
+    for (int i = 0; i < cbvr.rank(cbvr.size); i++) {
+        if (cbvr.rank(cbvr.select(i)) != i) { cout << "failure." << endl; return 0; }
     }
     cout << "success." << endl;
 
@@ -87,6 +104,11 @@ int main(int argc, char **argv) {
     for (int i = 0; i < cbvr.size; i++) { cbvr.rank(i); }
     end_read = system_clock::now();
     cout << "rank time(msec): " << duration_cast<milliseconds>(end_read - begin_read).count() << endl;
+
+    begin_read = system_clock::now();
+    for (int i = 0; i < cbvr.rank(bvr.size); i++) { cbvr.select(i); }
+    end_read = system_clock::now();
+    cout << "select time(msec): " << duration_cast<milliseconds>(end_read - begin_read).count() << endl;
     cout << endl;
 
     return 0;

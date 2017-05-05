@@ -39,6 +39,8 @@ namespace cds {
 
     bit_vector_rank::bit_vector_rank(uint64_t rate, uint64_t size) {
         this->rate = rate;
+        this->sample_ranks.resize(1, 0);
+        this->cell_ranks.resize(1, 0);
         this->resize(size);
     }
 
@@ -67,6 +69,10 @@ namespace cds {
     }
 
     uint64_t bit_vector_rank::rank(uint64_t index) const {
+        // rank(i) returns the number of 1s in B[0, i-1]
+        if (index == 0) { return 0; }
+        index--;
+
         uint64_t sample_index = index / (this->rate * this->cell_size);
         uint64_t cell_index = index / this->cell_size;
 
@@ -77,9 +83,33 @@ namespace cds {
 
     uint64_t bit_vector_rank::rank_naive(uint64_t index) const {
         uint64_t rank = 0;
-        for (uint64_t i = 0; i <= index; i++) {
+        for (uint64_t i = 0; i < index; i++) {
             rank += this->bit_read(i);
         }
         return rank;
     }
-};
+
+    uint64_t bit_vector_rank::select(uint64_t value) const {
+        vector<uint64_t>::const_iterator it = upper_bound(
+            this->sample_ranks.begin(), this->sample_ranks.end(), value
+        );
+        if (it == this->sample_ranks.end()) { return this->size; }
+        it--;
+
+        uint64_t rank = *it;
+        uint64_t cell_index = distance(this->sample_ranks.begin(), it) * this->rate;
+        while (rank <= value && cell_index < this->vec.size()) {
+            rank += popcount(this->vec[cell_index]);
+            cell_index++;
+        }
+        cell_index--;
+        rank -= popcount(this->vec[cell_index]);
+
+        uint64_t index = cell_index * this->cell_size;
+        while (rank <= value && index < this->size) {
+            rank += this->bit_read(index);
+            index++;
+        }
+        return index - 1;
+    }
+}

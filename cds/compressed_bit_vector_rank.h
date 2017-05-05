@@ -12,5 +12,7 @@ namespace cds {
 
         uint64_t vector_size() const;
         uint64_t rank(uint64_t index) const;
+
+        uint64_t select(uint64_t value) const;
     };
 }
