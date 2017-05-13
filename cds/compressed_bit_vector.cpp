@@ -45,7 +45,7 @@ namespace cds {
         return pair<uint64_t, uint64_t>(cclass, offset);
     }
 
-    uint64_t compressed_bit_vector::decode(uint64_t cclass, uint64_t offset, uint64_t index, bool is_rank) const {
+    uint64_t compressed_bit_vector::decode(uint64_t cclass, uint64_t offset, uint64_t index, bool is_rank, bool is_select) const {
         uint64_t index_tmp = 0;
         uint64_t rank = 0;
         while (cclass > 0) {
@@ -56,7 +56,8 @@ namespace cds {
                 bit = 1;
             }
             rank += bit;
-            if (index_tmp == index) { return is_rank ? rank : bit; }
+            if (is_select && (rank > index)) { return index_tmp; }
+            if (!is_select && (index_tmp == index)) { return is_rank ? rank : bit; }
             index_tmp++;
         }
         return is_rank ? rank : 0;

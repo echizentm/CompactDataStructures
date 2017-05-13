@@ -1,9 +1,9 @@
 #include "compressed_bit_vector_rank.h"
-#include <iostream>
-using namespace std;
 
 
 namespace cds {
+    using namespace std;
+
     compressed_bit_vector_rank::compressed_bit_vector_rank(const bit_vector& bv)
     : compressed_bit_vector(bv) {
         if (this->classes.size() == 0) { return; }
@@ -52,19 +52,25 @@ namespace cds {
         it--;
 
         uint64_t rank = *it;
-        uint64_t cell_index = distance(this->rank_samples.begin(), it) * this->sampling_rate;
-        while (rank <= value && cell_index < this->classes.size()) {
-            rank += this->classes[cell_index];
+        uint64_t sample_index = distance(this->rank_samples.begin(), it);
+        uint64_t begin = this->offset_samples[sample_index];
+        uint64_t end = begin;
+        uint64_t cclass = 0;
+        uint64_t cell_index = sample_index * this->sampling_rate;
+        while (cell_index < this->classes.size()) {
+            cclass = this->classes[cell_index];
+            begin = end;
+            end += this->offset_bits[cclass];
+            if ((rank + cclass) > value) { break; }
+            rank += cclass;
             cell_index++;
         }
-        cell_index--;
-        rank -= this->classes[cell_index];
-
-        uint64_t index = cell_index * this->block_size;
-        while (rank <= value && index < this->size) {
-            rank += this->access(index);
-            index++;
-        }
-        return index - 1;
+        return cell_index * this->block_size + this->decode(
+            cclass,
+            (begin == end) ? 0 : this->offsets.bits_read(begin, end),
+            value - rank,
+            false,
+            true
+        );
     }
 }
